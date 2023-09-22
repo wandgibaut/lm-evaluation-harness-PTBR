@@ -77,6 +77,7 @@ from .pt import imdb_pt
 from .pt import zeroshot_portuguese
 
 from .pt import toldbr
+from .pt import enem
 
 ########################################
 # Translation tasks
@@ -355,6 +356,10 @@ TASK_REGISTRY = {
     "zeroshot_portuguese": zeroshot_portuguese.zeroshot_portuguese,
 
     "toldbr": toldbr.ToLD_BR,
+    "enem": enem.ENEM,
+    "enem_CoT": enem.ENEM_CoT,
+    "enem_2022": enem.ENEM_2022,
+    "enem_CoT_2022": enem.ENEM_CoT_2022,
 
     # Requires manual download
     # Requires manual download of data.
