@@ -4,7 +4,7 @@ from lm_eval.metrics import mean, f1_score
 from functools import partial
 
 
-class ToLDBR(Task):
+class ToLD_BR(Task):
     VERSION = 0
     DATASET_PATH = "told-br"
     DATASET_NAME = None

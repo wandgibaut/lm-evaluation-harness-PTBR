@@ -76,6 +76,8 @@ from .pt import agnews_pt
 from .pt import imdb_pt
 from .pt import zeroshot_portuguese
 
+from .pt import toldbr
+
 ########################################
 # Translation tasks
 ########################################
@@ -351,6 +353,8 @@ TASK_REGISTRY = {
     "agnews_pt": agnews_pt.AGNews,
     "imdb_pt": imdb_pt.IMDB_PT,
     "zeroshot_portuguese": zeroshot_portuguese.zeroshot_portuguese,
+
+    "toldbr": toldbr.ToLD_BR,
 
     # Requires manual download
     # Requires manual download of data.
