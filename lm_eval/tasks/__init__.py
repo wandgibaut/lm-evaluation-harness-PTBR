@@ -68,7 +68,13 @@ from . import haerae
 
 
 from .pt import faquad
-from .pt import superglue_pt
+#from .pt import superglue_pt
+from .pt import boolq_pt
+from .pt import tweetsentbr
+from .pt import sst2_pt
+from .pt import agnews_pt
+from .pt import imdb_pt
+from .pt import zeroshot_portuguese
 
 ########################################
 # Translation tasks
@@ -338,7 +344,13 @@ TASK_REGISTRY = {
     "haerae_sn":haerae.SN,
 
     "faquad": faquad.FaQuAD,
-    "boolq_pt": superglue_pt.BoolQ,
+    #"boolq_pt": superglue_pt.BoolQ,
+    "boolq_pt": boolq_pt.BoolQ,
+    "tweetsentbr": tweetsentbr.TweetSentBR,
+    "sst2_pt": sst2_pt.SST2,
+    "agnews_pt": agnews_pt.AGNews,
+    "imdb_pt": imdb_pt.IMDB_PT,
+    "zeroshot_portuguese": zeroshot_portuguese.zeroshot_portuguese,
 
     # Requires manual download
     # Requires manual download of data.

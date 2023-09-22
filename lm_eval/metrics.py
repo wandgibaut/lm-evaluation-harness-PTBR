@@ -36,11 +36,11 @@ def matthews_corrcoef(items):
     return sklearn.metrics.matthews_corrcoef(golds, preds)
 
 
-def f1_score(items):
+def f1_score(items, average='binary'):
     unzipped_list = list(zip(*items))
     golds = unzipped_list[0]
     preds = unzipped_list[1]
-    fscore = sklearn.metrics.f1_score(golds, preds)
+    fscore = sklearn.metrics.f1_score(golds, preds, average=average)
 
     return np.max(fscore)
 
