@@ -21,15 +21,15 @@ class ToLD_BR(Task):
     def training_docs(self):
         if self.has_training_docs():
             if self._training_docs is None:
-                self._training_docs = list(self.dataset["train"]["binary"])
+                self._training_docs = list(self.dataset["train"])
             return self._training_docs
 
     def test_docs(self):
         if self.has_test_docs():
-            return self.dataset["test"]["binary"]
+            return self.dataset["test"]
         
     def validation_docs(self):
-        return self.dataset["validation"]["binary"]
+        return self.dataset["validation"]
 
     def doc_to_text(self, doc):
         return "Texto: {}\nClasse:".format(
