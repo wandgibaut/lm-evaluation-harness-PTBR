@@ -4,8 +4,7 @@ from lm_eval.metrics import mean
 
 class IMDB_PT(Task):
     VERSION = 0
-    # DATASET_PATH = "maritaca-ai/imdb_pt"
-    DATASET_PATH = "/content/drive/MyDrive/Artigos/Cabrita/imdb_pt/imdb_DEBUG"
+    DATASET_PATH = "maritaca-ai/imdb_pt"
     DATASET_NAME = None
 
     def has_training_docs(self):
