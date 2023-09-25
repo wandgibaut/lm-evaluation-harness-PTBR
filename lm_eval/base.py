@@ -464,7 +464,7 @@ class BaseLM(LM):
                 self.cache_hook.add_partial("greedy_until", (context, until), s)
 
                 res.append(s)
-        except KeyError:
+        except Exception as e:
             for context, until in tqdm(re_ord.get_reordered()):
                 if isinstance(until, str):
                     until = [until]
