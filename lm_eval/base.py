@@ -469,7 +469,18 @@ class BaseLM(LM):
                 if isinstance(until, str):
                     until = [until]
 
-                (primary_until,) = self.tok_encode(until[0])
+                if until:
+                    try:
+                        (primary_until,) = self.tok_encode(until[0])
+                    except ValueError:
+                        if not warn_stop_seq:
+                            print(
+                                "Warning: a primary stop sequence is multi-token! Will default to EOS token for this tokenizer. Consider using `hf-causal-experimental` for multi-token stop sequence support for the time being."
+                            )
+                            warn_stop_seq = True
+                        primary_until = self.eot_token_id
+                else:
+                    primary_until = None
 
                 context_enc = torch.tensor(
                     [self.tok_encode(context)[self.max_gen_toks - self.max_length :]]
