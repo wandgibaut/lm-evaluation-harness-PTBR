@@ -425,44 +425,70 @@ class BaseLM(LM):
         re_ord = utils.Reorderer(requests, _collate)
 
         warn_stop_seq = False
-        for context, request_args in tqdm(re_ord.get_reordered()):
-            until = request_args["until"]
-            if isinstance(until, str):
-                until = [until]
+        try:
+            for context, request_args in tqdm(re_ord.get_reordered()):
+                until = request_args["until"]
+                if isinstance(until, str):
+                    until = [until]
 
-            if until:
-                try:
-                    (primary_until,) = self.tok_encode(until[0])
-                except ValueError:
-                    if not warn_stop_seq:
-                        print(
-                            "Warning: a primary stop sequence is multi-token! Will default to EOS token for this tokenizer. Consider using `hf-causal-experimental` for multi-token stop sequence support for the time being."
-                        )
-                        warn_stop_seq = True
-                    primary_until = self.eot_token_id
-            else:
-                primary_until = None
+                if until:
+                    try:
+                        (primary_until,) = self.tok_encode(until[0])
+                    except ValueError:
+                        if not warn_stop_seq:
+                            print(
+                                "Warning: a primary stop sequence is multi-token! Will default to EOS token for this tokenizer. Consider using `hf-causal-experimental` for multi-token stop sequence support for the time being."
+                            )
+                            warn_stop_seq = True
+                        primary_until = self.eot_token_id
+                else:
+                    primary_until = None
 
-            context_enc = torch.tensor(
-                [self.tok_encode(context)[self.max_gen_toks - self.max_length :]]
-            ).to(self.device)
+                context_enc = torch.tensor(
+                    [self.tok_encode(context)[self.max_gen_toks - self.max_length :]]
+                ).to(self.device)
 
-            max_gen_tokens = min(
-                self.max_gen_toks, request_args.get("max_length", self.max_gen_toks)
-            )
-            cont = self._model_generate(
-                context_enc, context_enc.shape[1] + max_gen_tokens, primary_until
-            )
+                max_gen_tokens = min(
+                    self.max_gen_toks, request_args.get("max_length", self.max_gen_toks)
+                )
+                cont = self._model_generate(
+                    context_enc, context_enc.shape[1] + max_gen_tokens, primary_until
+                )
 
-            s = self.tok_decode(cont[0].tolist()[context_enc.shape[1] :])
+                s = self.tok_decode(cont[0].tolist()[context_enc.shape[1] :])
 
-            for term in until:
-                s = s.split(term)[0]
+                for term in until:
+                    s = s.split(term)[0]
 
-            # partial caching
-            self.cache_hook.add_partial("greedy_until", (context, until), s)
+                # partial caching
+                self.cache_hook.add_partial("greedy_until", (context, until), s)
 
-            res.append(s)
+                res.append(s)
+        except KeyError:
+            for context, until in tqdm(re_ord.get_reordered()):
+                if isinstance(until, str):
+                    until = [until]
+
+                (primary_until,) = self.tok_encode(until[0])
+
+                context_enc = torch.tensor(
+                    [self.tok_encode(context)[self.max_gen_toks - self.max_length :]]
+                ).to(self.device)
+
+                cont = self._model_generate(
+                    context_enc, context_enc.shape[1] + self.max_gen_toks, primary_until
+                )
+
+                s = self.tok_decode(cont[0].tolist()[context_enc.shape[1] :])
+
+                for term in until:
+                    s = s.split(term)[0]
+
+                # partial caching
+                self.cache_hook.add_partial("greedy_until", (context, until), s)
+
+                res.append(s)
+
 
         return re_ord.get_original(res)
 
