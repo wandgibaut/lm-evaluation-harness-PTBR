@@ -434,7 +434,7 @@ class BaseLM(LM):
                 if until:
                     try:
                         (primary_until,) = self.tok_encode(until[0])
-                    except ValueError:
+                    except Exception as e:
                         if not warn_stop_seq:
                             print(
                                 "Warning: a primary stop sequence is multi-token! Will default to EOS token for this tokenizer. Consider using `hf-causal-experimental` for multi-token stop sequence support for the time being."
@@ -472,7 +472,7 @@ class BaseLM(LM):
                 if until:
                     try:
                         (primary_until,) = self.tok_encode(until[0])
-                    except ValueError:
+                    except Exception as e:
                         if not warn_stop_seq:
                             print(
                                 "Warning: a primary stop sequence is multi-token! Will default to EOS token for this tokenizer. Consider using `hf-causal-experimental` for multi-token stop sequence support for the time being."
